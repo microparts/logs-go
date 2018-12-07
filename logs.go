@@ -17,8 +17,8 @@ type Config struct {
 }
 
 const (
-	ser   = "service"
-	sta   = "stage"
+	ser = "service"
+	sta = "stage"
 
 	staI  = "init"
 	staDB = "database"
@@ -55,7 +55,7 @@ var (
 )
 
 // LogsInit Инициация логгера
-func LogsInit(logCfg Config) {
+func LogsInit(logCfg *Config) {
 
 	switch logCfg.LogFormat {
 	case "text":
