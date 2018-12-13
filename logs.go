@@ -21,6 +21,7 @@ const (
 	sta = "stage"
 
 	staI  = "init"
+	staS  = "start"
 	staDB = "database"
 	staQ  = "query"
 	staW  = "webserver"
@@ -37,8 +38,9 @@ var (
 	HttpStopLogs   = HttpLogs.WithField(sta, "shutdown")
 
 	// Bot logs
-	BotLogs     = Log.WithField(ser, "bot")
-	BotInitLogs = BotLogs.WithField(sta, staI)
+	BotLogs      = Log.WithField(ser, "bot")
+	BotInitLogs  = BotLogs.WithField(sta, staI)
+	BotStartLogs = BotLogs.WithField(sta, staS)
 
 	// Seeds logs
 	SeedsLogs = Log.WithField(ser, "seeds").WithField(sta, "seeding")
