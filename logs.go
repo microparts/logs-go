@@ -1,11 +1,8 @@
 package logs
 
 import (
-	"github.com/gin-gonic/gin"
-	"os"
-	"time"
-
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 type DBLogger struct{}
@@ -99,55 +96,4 @@ func LogsInit(logCfg *Config) {
 	Log.Out = os.Stdout
 
 	Log.WithFields(logrus.Fields{ser: "log", sta: staI}).Info("Logs initiated")
-}
-
-// Лоирование работы БД
-func (*DBLogger) Print(v ...interface{}) {
-	if v[0] == "sql" {
-		Log.WithFields(logrus.Fields{ser: staDB, sta: staQ, "sql": v[3], "values": v[4]}).Info("Query sql")
-	}
-	if v[0] == "log" {
-		Log.WithFields(logrus.Fields{ser: staDB, sta: staQ, staQ: v[2]}).Info("Query log")
-	}
-}
-
-// MuxLogger Логирование работы веб-сервера
-func MuxLogger() gin.HandlerFunc {
-	var skip map[string]struct{}
-	return func(c *gin.Context) {
-		start := time.Now()
-		path := c.Request.URL.Path
-		raw := c.Request.URL.RawQuery
-
-		c.Next()
-
-		if _, ok := skip[path]; !ok {
-			clientIP := c.ClientIP()
-			method := c.Request.Method
-			statusCode := c.Writer.Status()
-
-			comment := c.Errors.ByType(gin.ErrorTypePrivate).String()
-
-			if raw != "" {
-				path = path + "?" + raw
-			}
-
-			// Stop timer
-			end := time.Now()
-			latency := end.Sub(start)
-
-			Log.WithFields(logrus.Fields{
-				ser:        staW,
-				sta:        "request",
-				"latency":  latency,
-				"clientIP": clientIP,
-				"status":   statusCode,
-				"proto":    c.Request.Proto,
-				"method":   method,
-				"path":     path,
-				staQ:       raw,
-				"comment":  comment,
-			}).Info("Incoming request")
-		}
-	}
 }

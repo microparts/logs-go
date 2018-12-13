@@ -53,6 +53,14 @@
   revision = "57fdcb988a5c543893cc61bce354a6e24ab70022"
 
 [[projects]]
+  digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
   digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
@@ -66,6 +74,14 @@
   packages = ["codec"]
   pruneopts = "UT"
   revision = "c88ee250d0221a57af388746f5cf03768c21d6e2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:1fc2e5da17bb454f6c1f24b45f79b17d9cd32f142b7a55d77793f0d7611da8f6"
+  name = "gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a655f6243fb0a398f36903e1e2d5968639f3b70e"
 
 [[projects]]
   branch = "master"
@@ -95,6 +111,14 @@
   version = "v8.18.1"
 
 [[projects]]
+  branch = "v2"
+  digest = "1:09a5ca453b56481dba2b17b6ee8ea90815dfd62c9a99e6d9420d301f9120a043"
+  name = "gopkg.in/tucnak/telebot.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "6451db130825a1388f6b392f141d2bd8cbdf6cf6"
+
+[[projects]]
   digest = "1:cacb98d52c60c337c2ce95a7af83ba0313a93ce5e73fa9e99a96aff70776b9d3"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -107,6 +131,8 @@
   input-imports = [
     "github.com/gin-gonic/gin",
     "github.com/sirupsen/logrus",
+    "gitlab.teamc.io/teamc.io/microservice/support/logs-go.git",
+    "gopkg.in/tucnak/telebot.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
