@@ -1,9 +1,10 @@
 package logs
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"time"
 )
 
 // MuxLogger Логирование работы веб-сервера
@@ -34,7 +35,7 @@ func MuxLogger() gin.HandlerFunc {
 			Log.WithFields(logrus.Fields{
 				ser:        staW,
 				sta:        "request",
-				"latency":  latency,
+				lat:        latency,
 				"clientIP": clientIP,
 				"status":   statusCode,
 				"proto":    c.Request.Proto,
