@@ -1,15 +1,17 @@
 package logs
 
 import (
+	"gitlab.teamc.io/teamc.io/microservice/support/logs-go/hooks"
 	"os"
 
 	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
-	LogLevel   string
-	LogFormat  string
+	LogLevel   string `yaml:"level"`
+	LogFormat  string `yaml:"format"`
 	TimeFormat string
+	DSN        string `yaml:"dsn"`
 }
 
 // LogsInit Инициация логгера
@@ -49,6 +51,13 @@ func Init(logCfg *Config) {
 	// Output to stdout instead of the default stderr
 	// Can be any io.Writer, see below for File example
 	Log.Out = os.Stdout
+
+	if logCfg.DSN != "" {
+		hook, err := hooks.NewSentryHook(logCfg.DSN)
+		if err == nil {
+			Log.Hooks.Add(hook)
+		}
+	}
 
 	Log.WithFields(logrus.Fields{ser: "log", sta: staI}).Info("Logs initiated")
 }
