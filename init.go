@@ -1,7 +1,6 @@
 package logs
 
 import (
-	"gitlab.teamc.io/teamc.io/microservice/support/logs-go/hooks"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -53,7 +52,7 @@ func Init(logCfg *Config) {
 	Log.Out = os.Stdout
 
 	if logCfg.DSN != "" {
-		hook, err := hooks.NewSentryHook(logCfg.DSN)
+		hook, err := NewSentryHook(logCfg.DSN)
 		if err == nil {
 			Log.Hooks.Add(hook)
 		}
