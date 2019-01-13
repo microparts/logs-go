@@ -2,6 +2,22 @@
 
 
 [[projects]]
+  digest = "1:fed1f537c2f1269fe475a8556c393fe466641682d73ef8fd0491cd3aa1e47bad"
+  name = "github.com/certifi/gocertifi"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "deb3ae2ef2610fde3330947281941c562861188b"
+  version = "2018.01.18"
+
+[[projects]]
+  digest = "1:d18f6f088d7d8365df47f49dfa24b6ff6701a941118ffda30c589d1bd954074b"
+  name = "github.com/getsentry/raven-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "f04e7487e9a6b9d9837d52743fb5f40576c56411"
+  version = "v0.2.0"
+
+[[projects]]
   branch = "master"
   digest = "1:36fe9527deed01d2a317617e59304eb2c4ce9f8a24115bcc5c2e37b3aee5bae4"
   name = "github.com/gin-contrib/sse"
@@ -71,12 +87,20 @@
   version = "1.0.1"
 
 [[projects]]
-  digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
+
+[[projects]]
+  digest = "1:87c2e02fb01c27060ccc5ba7c5a407cc91147726f8f40b70cceeedbc52b1f3a8"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bcd833dfe83d3cebad139e4a29ed79cb2318bf95"
-  version = "v1.2.0"
+  revision = "e1e72e9de974bd926e5c56f83753fba2df402ce5"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:03aa6e485e528acb119fb32901cf99582c380225fc7d5a02758e08b180cb56c3"
@@ -92,18 +116,18 @@
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   pruneopts = "UT"
-  revision = "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
+  revision = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
 
 [[projects]]
   branch = "master"
-  digest = "1:10405139b45e3a97a3842c93984710e30466eb933545f219ad3f5e45246973b4"
+  digest = "1:5ee4df7ab18e945607ac822de8d10b180baea263b5e8676a1041727543b9c1e4"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "9a3f9b0469bbc6b8802087ae5c0af9f61502de01"
+  revision = "48ac38b7c8cbedd50b1613c0fccacfc7d88dfcdf"
 
 [[projects]]
   digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
@@ -125,6 +149,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/getsentry/raven-go",
     "github.com/gin-gonic/gin",
     "github.com/sirupsen/logrus",
   ]
