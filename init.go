@@ -11,26 +11,30 @@ type Config struct {
 	LogFormat  string `yaml:"format"`
 	TimeFormat string
 	DSN        string `yaml:"dsn"`
+	StackTrace struct {
+		Skip    int `yaml:"skip"`
+		Context int `yaml:"context"`
+	} `yaml:"stacktrace"`
 }
 
 // LogsInit Инициация логгера
 func Init(logCfg *Config) {
-
-	switch logCfg.LogFormat {
+	configs = logCfg
+	switch configs.LogFormat {
 	case "text":
 		// logg as JSON instead of the default ASCII formatter.
 		Log.Formatter = &logrus.TextFormatter{
-			TimestampFormat:        logCfg.TimeFormat,
+			TimestampFormat:        configs.TimeFormat,
 			FullTimestamp:          true,
 			DisableLevelTruncation: true,
 			QuoteEmptyFields:       true,
 		}
 	default:
 		// logg as JSON instead of the default ASCII formatter.
-		Log.Formatter = &logrus.JSONFormatter{TimestampFormat: logCfg.TimeFormat}
+		Log.Formatter = &logrus.JSONFormatter{TimestampFormat: configs.TimeFormat}
 	}
 
-	switch logCfg.LogLevel {
+	switch configs.LogLevel {
 	case "panic":
 		Log.Level = logrus.PanicLevel
 	case "fatal":
@@ -51,8 +55,8 @@ func Init(logCfg *Config) {
 	// Can be any io.Writer, see below for File example
 	Log.Out = os.Stdout
 
-	if logCfg.DSN != "" {
-		hook, err := NewSentryHook(logCfg.DSN)
+	if configs.DSN != "" {
+		hook, err := NewSentryHook(configs.DSN)
 		if err == nil {
 			Log.Hooks.Add(hook)
 		}
