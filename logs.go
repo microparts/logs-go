@@ -17,7 +17,8 @@ const (
 )
 
 var (
-	Log = logrus.New()
+	configs *Config
+	Log     = logrus.New()
 
 	// Mux logs
 	RouterLogs     = Log.WithField(ser, "router")
