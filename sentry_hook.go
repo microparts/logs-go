@@ -77,7 +77,7 @@ func (h *SentryHook) Fire(e *logrus.Entry) error {
 	// Note that raven.NewStacktrace is currently set to ignore
 	// the first frame of the Stacktrace (this function) and will
 	// grab 3 lines of context.
-	stack := raven.NewStacktrace(1, 3, nil)
+	stack := raven.NewStacktrace(configs.StackTrace.Skip, configs.StackTrace.Context, nil)
 	exc := raven.NewException(err, stack)
 
 	// Add the exception to the sentry packet
