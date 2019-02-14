@@ -6,6 +6,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	environmentVar     = "STAGE"
+	defaultEnvironment = "unknown"
+)
+
 type Config struct {
 	LogLevel   string `yaml:"level"`
 	LogFormat  string `yaml:"format"`
@@ -58,6 +63,12 @@ func Init(logCfg *Config) {
 	if configs.DSN != "" {
 		hook, err := NewSentryHook(configs.DSN)
 		if err == nil {
+			env := os.Getenv(environmentVar)
+			if env == "" {
+				env = defaultEnvironment
+			}
+			hook.client.SetEnvironment(env)
+
 			Log.Hooks.Add(hook)
 		}
 	}
