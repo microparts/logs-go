@@ -22,13 +22,15 @@ type Config struct {
 	} `yaml:"stacktrace"`
 }
 
-// LogsInit Инициация логгера
-func Init(logCfg *Config) {
-	configs = logCfg
+// Logger constructor
+// Returns new logger instance
+func NewLogger(cfg *Config) *logrus.Logger {
+	configs = cfg
+	log := logrus.New()
 	switch configs.LogFormat {
 	case "text":
 		// logg as JSON instead of the default ASCII formatter.
-		Log.Formatter = &logrus.TextFormatter{
+		log.Formatter = &logrus.TextFormatter{
 			TimestampFormat:        configs.TimeFormat,
 			FullTimestamp:          true,
 			DisableLevelTruncation: true,
@@ -36,29 +38,29 @@ func Init(logCfg *Config) {
 		}
 	default:
 		// logg as JSON instead of the default ASCII formatter.
-		Log.Formatter = &logrus.JSONFormatter{TimestampFormat: configs.TimeFormat}
+		log.Formatter = &logrus.JSONFormatter{TimestampFormat: configs.TimeFormat}
 	}
 
 	switch configs.LogLevel {
 	case "panic":
-		Log.Level = logrus.PanicLevel
+		log.Level = logrus.PanicLevel
 	case "fatal":
-		Log.Level = logrus.FatalLevel
+		log.Level = logrus.FatalLevel
 	case "error":
-		Log.Level = logrus.ErrorLevel
+		log.Level = logrus.ErrorLevel
 	case "warn":
-		Log.Level = logrus.WarnLevel
+		log.Level = logrus.WarnLevel
 	case "info":
-		Log.Level = logrus.InfoLevel
+		log.Level = logrus.InfoLevel
 	case "debug":
-		Log.Level = logrus.DebugLevel
+		log.Level = logrus.DebugLevel
 	default:
-		Log.Level = logrus.WarnLevel
+		log.Level = logrus.WarnLevel
 	}
 
 	// Output to stdout instead of the default stderr
 	// Can be any io.Writer, see below for File example
-	Log.Out = os.Stdout
+	log.Out = os.Stdout
 
 	if configs.DSN != "" {
 		hook, err := NewSentryHook(configs.DSN)
@@ -73,5 +75,13 @@ func Init(logCfg *Config) {
 		}
 	}
 
+	return log
+}
+
+// LogsInit Инициация логгера
+// Deprecated
+func Init(logCfg *Config) {
+	Log = NewLogger(logCfg)
 	Log.WithFields(logrus.Fields{ser: "log", sta: staI}).Info("Logs initiated")
+
 }
