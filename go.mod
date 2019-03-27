@@ -1,4 +1,4 @@
-module gitlab.teamc.io/teamc.io/microservice/support/logs-go
+module github.com/microparts/logs-go
 
 go 1.12
 
