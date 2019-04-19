@@ -11,25 +11,26 @@ func logConfig() *Config {
 	return &Config{
 		Env:    "test",
 		Level:  "info",
-		Format: "test",
+		Format: "text",
 	}
 }
 
 // I just want to test it before pushing. Don't know how to test it in right way, sorry )
 func TestNewLogger(t *testing.T) {
 	cfg := logConfig()
-	l := NewLogger(cfg)
 
 	t.Run("Construct new logger", func(t *testing.T) {
+		l, err := NewLogger(cfg)
+		assert.NoError(t, err)
 		assert.Equal(t, logrus.InfoLevel, l.Level)
 	})
 
 	if cfg.Sentry.Enable {
 		t.Run("test sentry hook", func(t *testing.T) {
+			l, err := NewLogger(cfg)
+			assert.NoError(t, err)
 			l.Error("some error fire to sentry")
-
 			l.Warning("some warning fire to sentry")
-			//l.Fatal("some fatal error fire to sentry")
 		})
 	}
 

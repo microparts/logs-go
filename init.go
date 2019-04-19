@@ -38,7 +38,7 @@ type Log struct {
 
 // Logger constructor
 // Returns new logger instance
-func NewLogger(cfg *Config) *logrus.Logger {
+func NewLogger(cfg *Config) (*logrus.Logger, error) {
 	log := &Log{l: logrus.New()}
 	switch cfg.Format {
 	case "text":
@@ -84,31 +84,37 @@ func NewLogger(cfg *Config) *logrus.Logger {
 	log.l.Out = os.Stdout
 
 	if cfg.Sentry.Enable {
-		log.addSentryHook(cfg, sentryLevels)
+		err := log.addSentryHook(cfg, sentryLevels)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	log.l.Info("Logging initiated")
-	return log.l
+	return log.l, nil
 }
 
-func (log *Log) addSentryHook(cfg *Config, logLevels []logrus.Level) {
-	if hook, err := logrus_sentry.NewSentryHook(cfg.Sentry.DSN, logLevels); err == nil {
-
-		if cfg.Env == "" {
-			cfg.Env = defaultEnvironment
-		}
-
-		hook.SetEnvironment(cfg.Env)
-		hook.Timeout = cfg.Sentry.ResponseTimeout
-		if cfg.Sentry.StackTrace.Enable {
-			hook.StacktraceConfiguration.Enable = cfg.Sentry.StackTrace.Enable
-			hook.StacktraceConfiguration.Level = logrus.ErrorLevel
-			hook.StacktraceConfiguration.Skip = 6
-			hook.StacktraceConfiguration.Context = cfg.Sentry.StackTrace.Context
-			hook.StacktraceConfiguration.IncludeErrorBreadcrumb = true
-			hook.StacktraceConfiguration.SendExceptionType = true
-		}
-
-		log.l.Hooks.Add(hook)
+func (log *Log) addSentryHook(cfg *Config, logLevels []logrus.Level) error {
+	hook, err := logrus_sentry.NewSentryHook(cfg.Sentry.DSN, logLevels)
+	if err != nil {
+		return err
 	}
+
+	if cfg.Env == "" {
+		cfg.Env = defaultEnvironment
+	}
+
+	hook.SetEnvironment(cfg.Env)
+	hook.Timeout = cfg.Sentry.ResponseTimeout
+	if cfg.Sentry.StackTrace.Enable {
+		hook.StacktraceConfiguration.Enable = cfg.Sentry.StackTrace.Enable
+		hook.StacktraceConfiguration.Level = logrus.ErrorLevel
+		hook.StacktraceConfiguration.Skip = 6
+		hook.StacktraceConfiguration.Context = cfg.Sentry.StackTrace.Context
+		hook.StacktraceConfiguration.IncludeErrorBreadcrumb = true
+		hook.StacktraceConfiguration.SendExceptionType = true
+	}
+
+	log.l.Hooks.Add(hook)
+
+	return nil
 }
