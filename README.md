@@ -39,4 +39,8 @@ func main() {
 	
 	l.Warn("log some warning")
 }
-```  
+```
+
+## Licence
+
+The software is provided under [MIT Licence](LICENCE).
