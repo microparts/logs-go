@@ -1,35 +1,36 @@
 package logs
 
 import (
-	"github.com/sirupsen/logrus"
 	"testing"
+
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 )
 
-var (
-	cfg = &Config{
-		LogLevel:  "info",
-		LogFormat: "json",
-		DSN:       "some_test_string",
+func logConfig() *Config {
+	return &Config{
+		Env:    "test",
+		Level:  "info",
+		Format: "test",
 	}
-	logger *logrus.Logger
-)
+}
 
 // I just want to test it before pushing. Don't know how to test it in right way, sorry )
 func TestNewLogger(t *testing.T) {
-	Init(cfg)
-	t.Run("Construct new logger", func(t *testing.T) {
-		logger := NewLogger(cfg)
-		logger.Debug("some debug")
-		logger.Info("some info")
-		logger.Warn("some warn")
-		logger.Error("some error")
-	})
-}
+	cfg := logConfig()
+	l := NewLogger(cfg)
 
-func BenchmarkNewLogger(b *testing.B) {
-	var l *logrus.Logger
-	for n := 0; n < b.N; n++ {
-		l = NewLogger(cfg)
+	t.Run("Construct new logger", func(t *testing.T) {
+		assert.Equal(t, logrus.InfoLevel, l.Level)
+	})
+
+	if cfg.Sentry.Enable {
+		t.Run("test sentry hook", func(t *testing.T) {
+			l.Error("some error fire to sentry")
+
+			l.Warning("some warning fire to sentry")
+			//l.Fatal("some fatal error fire to sentry")
+		})
 	}
-	logger = l
+
 }

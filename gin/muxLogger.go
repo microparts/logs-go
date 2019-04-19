@@ -1,4 +1,4 @@
-package logs
+package gin
 
 import (
 	"time"
@@ -7,8 +7,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type MuxLogger struct {
+	l *logrus.Logger
+}
+
+func NewLogger(logger *logrus.Logger) *MuxLogger {
+	return &MuxLogger{l: logger}
+}
+
 // MuxLogger Логирование работы веб-сервера
-func MuxLogger() gin.HandlerFunc {
+func (m *MuxLogger) Log() gin.HandlerFunc {
 	var skip map[string]struct{}
 	return func(c *gin.Context) {
 		start := time.Now()
@@ -32,18 +40,16 @@ func MuxLogger() gin.HandlerFunc {
 			end := time.Now()
 			latency := end.Sub(start)
 
-			Log.WithFields(logrus.Fields{
-				ser:        staW,
-				sta:        "request",
-				lat:        latency,
+			m.l.WithFields(logrus.Fields{
+				"latency":  latency,
 				"clientIP": clientIP,
 				"status":   statusCode,
 				"proto":    c.Request.Proto,
 				"method":   method,
 				"path":     path,
-				staQ:       raw,
+				"query":    raw,
 				"comment":  comment,
-			}).Info("Incoming request")
+			}).Info("http request")
 		}
 	}
 }
