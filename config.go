@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	defaultSTAGE = "unknown"
+	defaultSTAGE = "defaults"
 )
 
 type StackTraceConfig struct {
