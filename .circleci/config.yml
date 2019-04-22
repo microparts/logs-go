@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@1.0.4
+
 jobs:
   build:
     docker:
@@ -20,5 +23,3 @@ jobs:
           path: /tmp/artifacts
       - codecov/upload:
           file: /tmp/artifacts/coverage.html
-orbs:
-  codecov: codecov/codecov@1.0.2
