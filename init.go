@@ -19,17 +19,16 @@ type StackTraceConfig struct {
 
 type SentryConfig struct {
 	Enable          bool             `yaml:"enable"`
+	Stage           string           `yaml:"stage"`
 	DSN             string           `yaml:"dsn"`
 	ResponseTimeout time.Duration    `yaml:"response_timeout"`
 	StackTrace      StackTraceConfig `yaml:"stacktrace"`
 }
 
 type Config struct {
-	Env        string       `yaml:"env"`
-	Level      string       `yaml:"level"`
-	Format     string       `yaml:"format"`
-	TimeFormat string       `yaml:"time_format"`
-	Sentry     SentryConfig `yaml:"sentry"`
+	Level  string        `yaml:"level"`
+	Format string        `yaml:"format"`
+	Sentry *SentryConfig `yaml:"sentry,omitempty"`
 }
 
 type Log struct {
@@ -44,14 +43,14 @@ func NewLogger(cfg *Config) (*logrus.Logger, error) {
 	case "text":
 		// logg as JSON instead of the default ASCII formatter.
 		log.l.Formatter = &logrus.TextFormatter{
-			TimestampFormat:        cfg.TimeFormat,
+			TimestampFormat:        time.RFC3339,
 			FullTimestamp:          true,
 			DisableLevelTruncation: true,
 			QuoteEmptyFields:       true,
 		}
 	default:
 		// logg as JSON instead of the default ASCII formatter.
-		log.l.Formatter = &logrus.JSONFormatter{TimestampFormat: cfg.TimeFormat}
+		log.l.Formatter = &logrus.JSONFormatter{TimestampFormat: time.RFC3339}
 	}
 
 	var sentryLevels []logrus.Level
@@ -83,7 +82,7 @@ func NewLogger(cfg *Config) (*logrus.Logger, error) {
 	// Can be any io.Writer, see below for File example
 	log.l.Out = os.Stdout
 
-	if cfg.Sentry.Enable {
+	if cfg.Sentry != nil && cfg.Sentry.Enable {
 		err := log.addSentryHook(cfg, sentryLevels)
 		if err != nil {
 			return nil, err
@@ -99,11 +98,11 @@ func (log *Log) addSentryHook(cfg *Config, logLevels []logrus.Level) error {
 		return err
 	}
 
-	if cfg.Env == "" {
-		cfg.Env = defaultEnvironment
+	if cfg.Sentry.Stage == "" {
+		cfg.Sentry.Stage = defaultEnvironment
 	}
 
-	hook.SetEnvironment(cfg.Env)
+	hook.SetEnvironment(cfg.Sentry.Stage)
 	hook.Timeout = cfg.Sentry.ResponseTimeout
 	if cfg.Sentry.StackTrace.Enable {
 		hook.StacktraceConfiguration.Enable = cfg.Sentry.StackTrace.Enable

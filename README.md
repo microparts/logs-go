@@ -18,12 +18,11 @@ import (
 
 func main() {
 	conf := &logs.Config{
-		Env:"test",
 		Level:"warn",
 		Format: "text",
-		TimeFormat: time.RFC3339,
-		Sentry: logs.SentryConfig{
+		Sentry: &logs.SentryConfig{
 			Enable: true,
+			Stage:"test",
 			DSN: "http://dsn.sentry.com",
 			ResponseTimeout: 0,
 			StackTrace: logs.StackTraceConfig{

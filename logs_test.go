@@ -9,7 +9,6 @@ import (
 
 func logConfig() *Config {
 	return &Config{
-		Env:    "test",
 		Level:  "info",
 		Format: "text",
 	}
@@ -25,7 +24,7 @@ func TestNewLogger(t *testing.T) {
 		assert.Equal(t, logrus.InfoLevel, l.Level)
 	})
 
-	if cfg.Sentry.Enable {
+	if cfg.Sentry != nil && cfg.Sentry.Enable {
 		t.Run("test sentry hook", func(t *testing.T) {
 			l, err := NewLogger(cfg)
 			assert.NoError(t, err)

@@ -18,6 +18,7 @@ func NewLogger(logger *logrus.Logger) *MuxLogger {
 // MuxLogger Логирование работы веб-сервера
 func (m *MuxLogger) Log() gin.HandlerFunc {
 	var skip map[string]struct{}
+	// @TODO попробовать избавиться от зависимости на gin либу
 	return func(c *gin.Context) {
 		start := time.Now()
 		path := c.Request.URL.Path
