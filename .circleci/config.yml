@@ -19,7 +19,8 @@ jobs:
             go test -coverprofile=c.out
             go tool cover -html=c.out -o coverage.html
             mv coverage.html /tmp/artifacts
+            mv c.out /tmp/artifacts
       - store_artifacts:
           path: /tmp/artifacts
       - codecov/upload:
-          file: /tmp/artifacts/coverage.html
+          file: /tmp/artifacts/*
