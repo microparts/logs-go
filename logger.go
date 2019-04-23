@@ -8,17 +8,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type log struct {
-	logger *logrus.Logger
+type Logger struct {
+	*logrus.Logger
 }
 
 //NewLogger is logrus instantiating wrapper. Returns configured logrus instance
-func NewLogger(cfg *Config) (*logrus.Logger, error) {
-	log := &log{logrus.New()}
+func NewLogger(cfg *Config) (*Logger, error) {
+	log := &Logger{logrus.New()}
 	switch cfg.Format {
 	case "text":
 		// logg as JSON instead of the default ASCII formatter.
-		log.logger.Formatter = &logrus.TextFormatter{
+		log.Formatter = &logrus.TextFormatter{
 			TimestampFormat:        time.RFC3339,
 			FullTimestamp:          true,
 			DisableLevelTruncation: true,
@@ -26,14 +26,14 @@ func NewLogger(cfg *Config) (*logrus.Logger, error) {
 		}
 	default:
 		// logg as JSON instead of the default ASCII formatter.
-		log.logger.Formatter = &logrus.JSONFormatter{TimestampFormat: time.RFC3339}
+		log.Formatter = &logrus.JSONFormatter{TimestampFormat: time.RFC3339}
 	}
 
-	log.logger.Level = getLoggerLevel(cfg)
+	log.Level = getLoggerLevel(cfg)
 
 	// Output to stdout instead of the default stderr
 	// Can be any io.Writer, see below for File example
-	log.logger.Out = os.Stdout
+	log.Out = os.Stdout
 
 	if cfg.Sentry != nil && cfg.Sentry.Enable {
 		err := log.addSentryHook(cfg)
@@ -42,10 +42,10 @@ func NewLogger(cfg *Config) (*logrus.Logger, error) {
 		}
 	}
 
-	return log.logger, nil
+	return log, nil
 }
 
-//getLoggerLevel translates text log level to logrus log level
+//getLoggerLevel translates text Logger level to logrus Logger level
 func getLoggerLevel(cfg *Config) logrus.Level {
 	ll, err := logrus.ParseLevel(cfg.Level)
 	if err != nil {
@@ -55,7 +55,7 @@ func getLoggerLevel(cfg *Config) logrus.Level {
 	return ll
 }
 
-func (l *log) addSentryHook(cfg *Config) error {
+func (l *Logger) addSentryHook(cfg *Config) error {
 	minLogLevel := getLoggerLevel(cfg)
 
 	hook, err := logrus_sentry.NewSentryHook(cfg.Sentry.DSN, sentryLevels[:minLogLevel])
@@ -74,7 +74,7 @@ func (l *log) addSentryHook(cfg *Config) error {
 		hook.StacktraceConfiguration.SendExceptionType = true
 	}
 
-	l.logger.Hooks.Add(hook)
+	l.Hooks.Add(hook)
 
 	return nil
 }

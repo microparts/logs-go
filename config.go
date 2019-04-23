@@ -11,8 +11,8 @@ const (
 )
 
 type StackTraceConfig struct {
-	Enable  bool
-	Context int `yaml:"context"`
+	Enable  bool `yaml:"enable"`
+	Context int  `yaml:"context"`
 }
 
 type SentryConfig struct {

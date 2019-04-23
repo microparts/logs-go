@@ -38,7 +38,7 @@ func TestNewLogger(t *testing.T) {
 		assert.Equal(t, logrus.InfoLevel, l.GetLevel())
 	})
 
-	t.Run("log format", func(t *testing.T) {
+	t.Run("Logger format", func(t *testing.T) {
 		cfg := logConfig(false)
 		cfg.Format = "du'soley"
 		l, err := NewLogger(cfg)
@@ -63,13 +63,13 @@ func TestNewLogger(t *testing.T) {
 }
 
 func TestGetLoggerLeve(t *testing.T) {
-	t.Run("existing log level", func(t *testing.T) {
+	t.Run("existing Logger level", func(t *testing.T) {
 		cfg := logConfig(false)
 		ll := getLoggerLevel(cfg)
 		assert.Equal(t, logrus.InfoLevel, ll)
 
 	})
-	t.Run("not existing log level", func(t *testing.T) {
+	t.Run("not existing Logger level", func(t *testing.T) {
 		cfg := logConfig(false)
 		cfg.Level = "paranoia"
 		ll := getLoggerLevel(cfg)
