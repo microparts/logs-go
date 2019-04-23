@@ -1,7 +1,7 @@
 logs-go
 -------
 
-[![CircleCI](https://circleci.com/gh/microparts/logs-go.svg?style=svg)](https://circleci.com/gh/microparts/logs-go) [![codecov](https://codecov.io/gh/microparts/logs-go/branch/master/graph/badge.svg)](https://codecov.io/gh/microparts/logs-go)
+[![CircleCI](https://circleci.com/gh/microparts/logs-go.svg?style=shield)](https://circleci.com/gh/microparts/logs-go) [![codecov](https://codecov.io/gh/microparts/logs-go/graph/badge.svg)](https://codecov.io/gh/microparts/logs-go)
 
 [Logrus](github.com/sirupsen/logrus) wrapper for easy use with sentry hook, database (gorm) and mux (gin) loggers.
 
