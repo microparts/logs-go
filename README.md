@@ -1,3 +1,5 @@
+This repo is **DEPRECATED**! Use https://github.com/spacetab-io/logs-go instead.
+
 logs-go
 -------
 
